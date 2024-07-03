@@ -1,2 +1,6 @@
-# internet-banking-client
-인터넷 뱅킹 프로젝트 클라이언트
+### 인터넷 뱅킹 클라이언트
+
+- 의존성 설치
+  ```
+    npm install
+  ```
