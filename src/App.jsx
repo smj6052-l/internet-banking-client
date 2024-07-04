@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
+import BottomNavBar from "./components/bottom-navigation-bar";
 
 export default function App() {
   return (
     <>
       <Outlet />
-      <div>하단 네비게이션 바</div>
+      <BottomNavBar />
     </>
   );
 }
