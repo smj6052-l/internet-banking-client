@@ -1,7 +1,10 @@
+import { Outlet } from "react-router-dom";
+
 export default function App() {
   return (
     <>
-      <div>Hello React!</div>
+      <Outlet />
+      <div>하단 네비게이션 바</div>
     </>
   );
 }
