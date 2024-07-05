@@ -1,20 +1,19 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
   height: 100%;
-  background-color: white;  
+  background-color: white;
 `;
 export const InnerContainer = styled.div`
   position: absolute;
   padding-bottom: var(--btm-navbar-height);
-  top :5%;
+  top: 5%;
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
-  width: 20em; 
-  margin-bottom:30rem;
+  width: 20em;
 `;
 
 export const Header = styled.div`
@@ -33,7 +32,7 @@ export const UserName = styled.div`
   background-color: #686868;
   padding: 0.3rem 0.6rem;
   border-radius: 20px;
-  color: white
+  color: white;
 `;
 
 export const IconBig = styled.div`
@@ -41,15 +40,26 @@ export const IconBig = styled.div`
   height: 2.5rem;
   background-color: #d3d3d3;
   border-radius: 50%;
-  font-size:2rem;
-  display : flex;
-  justify-content : center;
-  align-items : center;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const AccountList = styled.div`
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
-
+export const IconBiger = styled.div`
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const EmptyBox = styled.div`
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
+`;
