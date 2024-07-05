@@ -7,6 +7,7 @@ export const Container = styled.div`
 `;
 export const InnerContainer = styled.div`
   position: absolute;
+  padding-bottom: var(--btm-navbar-height);
   top :5%;
   left: 50%;
   transform: translate(-50%,0);
