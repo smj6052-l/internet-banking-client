@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import * as S from "./styles/signup.style";
+import Recaptcha from "../../components/recaptcha";
 
 export default function Signup() {
   const {
@@ -20,8 +21,31 @@ export default function Signup() {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [emailCheckMessage, setEmailCheckMessage] = useState("");
 
+  const [captchaToken, setCaptchaToken] = useState(null);
+
   // POST: 사용자 회원가입 정보 입력
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    const {
+      client_id,
+      client_name,
+      client_pw,
+      client_email,
+      client_phone,
+      client_address,
+      client_resi,
+    } = data;
+
+    const body = {
+      client_id,
+      client_name,
+      client_pw,
+      client_email,
+      client_phone,
+      client_address,
+      client_resi,
+    };
+
     if (!isIdChecked) {
       setError("client_id", {
         type: "manual",
@@ -36,22 +60,33 @@ export default function Signup() {
       });
       return;
     }
+    if (!captchaToken) {
+      alert("봇 인증 검사를 진행해주세요.");
+      return;
+    }
 
-    const signupPostURL = `/api/signup`;
-    axios
-      .post(signupPostURL, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        alert("회원가입 성공");
-        navigate("/login");
-      })
-      .catch(() => {
-        alert("회원가입 실패");
-      });
+    const response = await axios.post("api/signup/verify-captcha", {
+      token: captchaToken,
+    });
+    console.log("🚀 ~ onSubmit ~ response:", response);
+
+    if (response.status === 200) {
+      const signupPostURL = `api/signup`;
+      axios
+        .post(signupPostURL, body, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          alert("회원가입 성공");
+          navigate("/login");
+        })
+        .catch(() => {
+          alert("회원가입 실패");
+        });
+    }
   };
 
   // POST: 아이디 중복 확인
@@ -137,6 +172,7 @@ export default function Signup() {
       .post(`api/signup/verify-email-code`, { verificationCode })
       .then((res) => {
         if (res.status === 200) {
+          clearErrors("client_email");
           setEmailCheckMessage(res.data?.message);
           setIsEmailChecked(true);
         }
@@ -163,6 +199,10 @@ export default function Signup() {
         }
         setIsEmailChecked(false);
       });
+  };
+
+  const handleCaptchaVerify = (token) => {
+    setCaptchaToken(token);
   };
 
   return (
@@ -284,6 +324,7 @@ export default function Signup() {
             required
             {...register("client_phone", { required: true, maxLength: 255 })}
           />
+          <Recaptcha onVerify={handleCaptchaVerify} />
           <S.SubmitButton>완료</S.SubmitButton>
           <S.GotoLogin>이미 계정이 있으신가요?</S.GotoLogin>
           <S.GotoLoginBtn>
