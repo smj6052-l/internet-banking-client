@@ -9,7 +9,7 @@ export default function Recaptcha({ onVerify }) {
   return (
     <div>
       <ReCAPTCHA
-        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+        sitekey="6LfVEwkqAAAAACWX4xdffm2kAxCxfyc5dCGtxUA4"
         onChange={handleCaptchaChange}
       />
     </div>
