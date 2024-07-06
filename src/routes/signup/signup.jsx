@@ -25,7 +25,7 @@ export default function Signup() {
 
   // POST: 사용자 회원가입 정보 입력
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+    // 서버에서 필요한 정보만 추출
     const {
       client_id,
       client_name,
@@ -68,8 +68,6 @@ export default function Signup() {
     const response = await axios.post("api/signup/verify-captcha", {
       token: captchaToken,
     });
-    console.log("🚀 ~ onSubmit ~ response:", response);
-
     if (response.status === 200) {
       const signupPostURL = `api/signup`;
       axios
@@ -79,7 +77,6 @@ export default function Signup() {
           },
         })
         .then((res) => {
-          console.log(res);
           alert("회원가입 성공");
           navigate("/login");
         })
