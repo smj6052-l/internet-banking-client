@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -22,6 +22,8 @@ export default function Signup() {
   const [emailCheckMessage, setEmailCheckMessage] = useState("");
 
   const [captchaToken, setCaptchaToken] = useState(null);
+
+  const fileInputRef = useRef(null);
 
   // POST: 사용자 회원가입 정보 입력
   const onSubmit = async (data) => {
@@ -83,6 +85,13 @@ export default function Signup() {
         .catch(() => {
           alert("회원가입 실패");
         });
+    }
+  };
+
+  // Click: 대표 사진 등록
+  const handleFileInputClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -205,11 +214,15 @@ export default function Signup() {
   return (
     <S.FormWrapper onSubmit={handleSubmit(onSubmit)}>
       <S.FormContent>
+        <S.GotoLogin>이미 계정이 있으신가요?</S.GotoLogin>
+        <S.GotoLoginBtn>
+          <Link to={"/login"}>&larr; 로그인 하러가기</Link>
+        </S.GotoLoginBtn>
         <S.Header>
           <S.Title>회원가입</S.Title>
         </S.Header>
         <S.InputContainer>
-          <S.Label>성명</S.Label>
+          <S.Label>성명 &#42;</S.Label>
           <S.Input
             type="text"
             placeholder="이름을 입력하세요"
@@ -217,39 +230,49 @@ export default function Signup() {
             {...register("client_name", { required: true, maxLength: 20 })}
           />
           <S.Label>대표 사진</S.Label>
-          <S.Input type="file" {...register("client_photo")} />
-          <S.Label>아이디</S.Label>
-          <S.Input
-            type="text"
-            placeholder="아이디를 입력하세요"
-            required
-            {...register("client_id", { required: true, maxLength: 20 })}
+          <S.HiddenInput
+            type="file"
+            ref={fileInputRef}
+            {...register("client_photo")}
           />
-          <S.IdDuplicationCheckBtn
-            onClick={(e) => {
-              e.preventDefault();
-              const client_id = document.querySelector(
-                'input[name="client_id"]'
-              ).value;
-              checkIdDuplication(client_id);
-            }}
-          >
-            아이디 중복 확인
-          </S.IdDuplicationCheckBtn>
+          <S.FileButton type="button" onClick={handleFileInputClick}>
+            파일 선택
+          </S.FileButton>
+          <S.Label>아이디 &#42;</S.Label>
+          <S.CoupleInputContainer>
+            <S.Input
+              type="text"
+              placeholder="아이디를 입력하세요"
+              required
+              {...register("client_id", { required: true, maxLength: 20 })}
+            />
+            <S.VerificationBtn
+              onClick={(e) => {
+                e.preventDefault();
+                const client_id = document.querySelector(
+                  'input[name="client_id"]'
+                ).value;
+                checkIdDuplication(client_id);
+              }}
+              width="10rem"
+            >
+              중복확인
+            </S.VerificationBtn>
+          </S.CoupleInputContainer>
           {errors.client_id && (
             <S.ErrorMessage>{errors.client_id.message}</S.ErrorMessage>
           )}
           {idCheckMessage && (
             <S.IdCheckMessage>{idCheckMessage}</S.IdCheckMessage>
           )}
-          <S.Label>비밀번호</S.Label>
+          <S.Label>비밀번호 &#42;</S.Label>
           <S.Input
             type="password"
-            placeholder="비밀번호를 입력하세요."
+            placeholder="비밀번호를 입력하세요"
             required
             {...register("client_pw", { required: true, maxLength: 20 })}
           />
-          <S.Label>비밀번호 확인</S.Label>
+          <S.Label>비밀번호 확인 &#42;</S.Label>
           <S.Input
             type="password"
             placeholder="비밀번호 확인"
@@ -259,74 +282,82 @@ export default function Signup() {
               maxLength: 20,
             })}
           />
-          <S.Label>이메일</S.Label>
-          <S.Input
-            type="email"
-            placeholder="이메일을 입력하세요."
-            required
-            {...register("client_email", { required: true, maxLength: 40 })}
-          />
-          <S.EmailVerificationBtn
-            onClick={(e) => {
-              e.preventDefault();
-              const client_email = document.querySelector(
-                'input[name="client_email"]'
-              ).value;
-              verifyEmail(client_email);
-            }}
-          >
-            인증코드 전송
-          </S.EmailVerificationBtn>
-          <S.Input
-            type="number"
-            placeholder="인증코드를 입력하세요."
-            required
-            {...register("verificationCode", { required: true, maxLength: 40 })}
-          />
-          <S.EmailVerificationBtn
-            onClick={(e) => {
-              e.preventDefault();
-              const verificationCode = document.querySelector(
-                'input[name="verificationCode"]'
-              ).value;
-              confirmVerificationCode(verificationCode);
-            }}
-          >
-            인증코드 확인
-          </S.EmailVerificationBtn>
+          <S.Label>이메일 &#42;</S.Label>
+          <S.CoupleInputContainer>
+            <S.Input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              required
+              {...register("client_email", { required: true, maxLength: 40 })}
+            />
+            <S.VerificationBtn
+              onClick={(e) => {
+                e.preventDefault();
+                const client_email = document.querySelector(
+                  'input[name="client_email"]'
+                ).value;
+                verifyEmail(client_email);
+              }}
+              width="16rem"
+            >
+              인증코드 전송
+            </S.VerificationBtn>
+          </S.CoupleInputContainer>
           {errors.client_email && (
             <S.ErrorMessage>{errors.client_email.message}</S.ErrorMessage>
           )}
+          <S.CoupleInputContainer>
+            <S.Input
+              type="text"
+              placeholder="인증 코드"
+              required
+              {...register("verificationCode", {
+                required: true,
+                maxLength: 40,
+              })}
+            />
+
+            <S.VerificationBtn
+              onClick={(e) => {
+                e.preventDefault();
+                const verificationCode = document.querySelector(
+                  'input[name="verificationCode"]'
+                ).value;
+                confirmVerificationCode(verificationCode);
+              }}
+              width="16rem"
+            >
+              인증코드 확인
+            </S.VerificationBtn>
+          </S.CoupleInputContainer>
           {emailCheckMessage && (
             <S.IdCheckMessage>{emailCheckMessage}</S.IdCheckMessage>
           )}
-          <S.Label>주민등록번호</S.Label>
+          <S.Label>주민등록번호 &#42;</S.Label>
           <S.Input
             type="text"
-            placeholder="주민등록번호를 입력하세요."
+            placeholder="주민등록번호를 입력하세요"
             required
             {...register("client_resi", { required: true, maxLength: 20 })}
           />
-          <S.Label>주소</S.Label>
+          <S.Label>주소 &#42;</S.Label>
           <S.Input
             type="text"
-            placeholder="주소를 입력하세요."
+            placeholder="주소를 입력하세요"
             required
             {...register("client_address", { required: true, maxLength: 255 })}
           />
-          <S.Label>휴대폰 번호</S.Label>
+          <S.Label>휴대폰 번호 &#42;</S.Label>
           <S.Input
             type="text"
-            placeholder="휴대폰 번호를 입력하세요."
+            placeholder="휴대폰 번호를 입력하세요"
             required
             {...register("client_phone", { required: true, maxLength: 255 })}
           />
-          <Recaptcha onVerify={handleCaptchaVerify} />
+          <S.RecaptchaContainer>
+            <Recaptcha onVerify={handleCaptchaVerify} />
+          </S.RecaptchaContainer>
           <S.SubmitButton>완료</S.SubmitButton>
-          <S.GotoLogin>이미 계정이 있으신가요?</S.GotoLogin>
-          <S.GotoLoginBtn>
-            <Link to={"/login"}>&larr; 로그인 하러가기</Link>
-          </S.GotoLoginBtn>
         </S.InputContainer>
       </S.FormContent>
     </S.FormWrapper>
