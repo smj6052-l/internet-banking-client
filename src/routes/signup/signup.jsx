@@ -13,8 +13,12 @@ export default function Signup() {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  // 아이디 체크 상태
   const [isIdChecked, setIsIdChecked] = useState(false);
   const [idCheckMessage, setIdCheckMessage] = useState("");
+  // 이메일(인증 코드) 체크 상태
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [emailCheckMessage, setEmailCheckMessage] = useState("");
 
   // POST: 사용자 회원가입 정보 입력
   const onSubmit = (data) => {
@@ -22,6 +26,13 @@ export default function Signup() {
       setError("client_id", {
         type: "manual",
         message: "아이디 중복 확인을 해주세요.",
+      });
+      return;
+    }
+    if (!isEmailChecked) {
+      setError("client_email", {
+        type: "manual",
+        message: "이메일 인증을 해주세요.",
       });
       return;
     }
@@ -48,10 +59,13 @@ export default function Signup() {
     axios
       .post(`api/signup/check-id`, { client_id })
       .then((res) => {
-        // 사용 가능
-        clearErrors("client_id");
-        setIdCheckMessage(res.data?.message);
-        setIsIdChecked(true);
+        if (res)
+          if (res.status === 200) {
+            // 사용 가능
+            clearErrors("client_id");
+            setIdCheckMessage(res.data?.message);
+            setIsIdChecked(true);
+          }
       })
       .catch((error) => {
         if (error.response) {
@@ -83,6 +97,73 @@ export default function Signup() {
         setIsIdChecked(false);
       });
   };
+  // POST: 이메일 검증
+  const verifyEmail = (client_email) => {
+    axios
+      .post(`api/signup/send-verification-code`, { client_email })
+      .then((res) => {
+        if (res.status === 200) {
+          // 사용 가능
+          clearErrors("client_email");
+          setEmailCheckMessage(res.data?.message);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          switch (error.response.status) {
+            // 서버 에러
+            case 500:
+              setEmailCheckMessage(error.response.data.message);
+              break;
+            default:
+              setEmailCheckMessage(
+                `에러가 발생했습니다. 상태 코드: ${error.response.status}`
+              );
+              break;
+          }
+        } else {
+          setError("client_email", {
+            type: "manual",
+            message: "이메일 확인 실패",
+          });
+          setEmailCheckMessage("이메일 확인 실패");
+        }
+        setIsEmailChecked(false);
+      });
+  };
+  // POST: 인증코드 확인
+  const confirmVerificationCode = (verificationCode) => {
+    axios
+      .post(`api/signup/verify-email-code`, { verificationCode })
+      .then((res) => {
+        if (res.status === 200) {
+          setEmailCheckMessage(res.data?.message);
+          setIsEmailChecked(true);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          switch (error.response.status) {
+            // 서버 에러
+            case 400:
+              setEmailCheckMessage(error.response.data.message);
+              break;
+            default:
+              setEmailCheckMessage(
+                `에러가 발생했습니다. 상태 코드: ${error.response.status}`
+              );
+              break;
+          }
+        } else {
+          setError("client_email", {
+            type: "manual",
+            message: "이메일 확인 실패",
+          });
+          setEmailCheckMessage("이메일 확인 실패");
+        }
+        setIsEmailChecked(false);
+      });
+  };
 
   return (
     <S.FormWrapper onSubmit={handleSubmit(onSubmit)}>
@@ -107,7 +188,7 @@ export default function Signup() {
             required
             {...register("client_id", { required: true, maxLength: 20 })}
           />
-          <S.IdDuplicationCheck
+          <S.IdDuplicationCheckBtn
             onClick={(e) => {
               e.preventDefault();
               const client_id = document.querySelector(
@@ -117,7 +198,7 @@ export default function Signup() {
             }}
           >
             아이디 중복 확인
-          </S.IdDuplicationCheck>
+          </S.IdDuplicationCheckBtn>
           {errors.client_id && (
             <S.ErrorMessage>{errors.client_id.message}</S.ErrorMessage>
           )}
@@ -148,6 +229,40 @@ export default function Signup() {
             required
             {...register("client_email", { required: true, maxLength: 40 })}
           />
+          <S.EmailVerificationBtn
+            onClick={(e) => {
+              e.preventDefault();
+              const client_email = document.querySelector(
+                'input[name="client_email"]'
+              ).value;
+              verifyEmail(client_email);
+            }}
+          >
+            인증코드 전송
+          </S.EmailVerificationBtn>
+          <S.Input
+            type="number"
+            placeholder="인증코드를 입력하세요."
+            required
+            {...register("verificationCode", { required: true, maxLength: 40 })}
+          />
+          <S.EmailVerificationBtn
+            onClick={(e) => {
+              e.preventDefault();
+              const verificationCode = document.querySelector(
+                'input[name="verificationCode"]'
+              ).value;
+              confirmVerificationCode(verificationCode);
+            }}
+          >
+            인증코드 확인
+          </S.EmailVerificationBtn>
+          {errors.client_email && (
+            <S.ErrorMessage>{errors.client_email.message}</S.ErrorMessage>
+          )}
+          {emailCheckMessage && (
+            <S.IdCheckMessage>{emailCheckMessage}</S.IdCheckMessage>
+          )}
           <S.Label>주민등록번호</S.Label>
           <S.Input
             type="text"
@@ -170,10 +285,10 @@ export default function Signup() {
             {...register("client_phone", { required: true, maxLength: 255 })}
           />
           <S.SubmitButton>완료</S.SubmitButton>
-          <S.gotoLogin>이미 계정이 있으신가요?</S.gotoLogin>
-          <S.gotoLoginBtn>
+          <S.GotoLogin>이미 계정이 있으신가요?</S.GotoLogin>
+          <S.GotoLoginBtn>
             <Link to={"/login"}>&larr; 로그인 하러가기</Link>
-          </S.gotoLoginBtn>
+          </S.GotoLoginBtn>
         </S.InputContainer>
       </S.FormContent>
     </S.FormWrapper>

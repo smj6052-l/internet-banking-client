@@ -49,7 +49,21 @@ export const Input = styled.input`
   }
 `;
 
-export const IdDuplicationCheck = styled.button`
+export const IdDuplicationCheckBtn = styled.button`
+  margin-top: 2rem;
+  width: 10rem;
+  height: 3.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 1.5rem;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+export const EmailVerificationBtn = styled.button`
   margin-top: 2rem;
   width: 10rem;
   height: 3.5rem;
@@ -67,6 +81,9 @@ export const IdDuplicationCheck = styled.button`
 export const ErrorMessage = styled.span`
   color: red;
 `;
+// export const SuccessMessage = styled.span`
+//   color: green;
+// `;
 export const IdCheckMessage = styled.span`
   color: red;
 `;
@@ -85,12 +102,12 @@ export const SubmitButton = styled.button`
   }
 `;
 
-export const gotoLogin = styled.div`
+export const GotoLogin = styled.div`
   width: 100%;
   font-size: 0.9rem;
   text-align: center;
 `;
-export const gotoLoginBtn = styled.button`
+export const GotoLoginBtn = styled.button`
   width: 100%;
   height: 3.5rem;
   letter-spacing: 0.05em;
