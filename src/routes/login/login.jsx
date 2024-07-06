@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as S from "./styles/login.style";
 
 // 로그인 페이지
@@ -91,7 +91,9 @@ export default function Login() {
               </S.LoginButton>
             </S.Form>
             <S.SignupHeader>아직 계정이 없으신가요?</S.SignupHeader>
-            <S.SignupButton>회원가입하기 &rarr;</S.SignupButton>
+            <S.SignupButton>
+              <Link to={"/signup"}>회원가입하기 &rarr;</Link>
+            </S.SignupButton>
           </S.FormWrapper>
         </S.InnerContainer>
       </S.Container>
