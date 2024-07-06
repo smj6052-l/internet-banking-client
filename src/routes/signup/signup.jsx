@@ -25,27 +25,6 @@ export default function Signup() {
 
   // POST: 사용자 회원가입 정보 입력
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-    const {
-      client_id,
-      client_name,
-      client_pw,
-      client_email,
-      client_phone,
-      client_address,
-      client_resi,
-    } = data;
-
-    const body = {
-      client_id,
-      client_name,
-      client_pw,
-      client_email,
-      client_phone,
-      client_address,
-      client_resi,
-    };
-
     if (!isIdChecked) {
       setError("client_id", {
         type: "manual",
@@ -68,18 +47,16 @@ export default function Signup() {
     const response = await axios.post("api/signup/verify-captcha", {
       token: captchaToken,
     });
-    console.log("🚀 ~ onSubmit ~ response:", response);
 
     if (response.status === 200) {
       const signupPostURL = `api/signup`;
       axios
-        .post(signupPostURL, body, {
+        .post(signupPostURL, data, {
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((res) => {
-          console.log(res);
           alert("회원가입 성공");
           navigate("/login");
         })
@@ -91,6 +68,11 @@ export default function Signup() {
 
   // POST: 아이디 중복 확인
   const checkIdDuplication = (client_id) => {
+    if (!client_id) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+
     axios
       .post(`api/signup/check-id`, { client_id })
       .then((res) => {
@@ -134,6 +116,10 @@ export default function Signup() {
   };
   // POST: 이메일 검증
   const verifyEmail = (client_email) => {
+    if (!client_email) {
+      alert("이메일을 입력하세요");
+      return;
+    }
     axios
       .post(`api/signup/send-verification-code`, { client_email })
       .then((res) => {
@@ -226,7 +212,13 @@ export default function Signup() {
             type="text"
             placeholder="아이디를 입력하세요"
             required
-            {...register("client_id", { required: true, maxLength: 20 })}
+            {...register("client_id", {
+              required: "아이디를 입력하세요.",
+              maxLength: {
+                value: 20,
+                message: "아이디는 20자 이하로 입력하세요.",
+              },
+            })}
           />
           <S.IdDuplicationCheckBtn
             onClick={(e) => {
