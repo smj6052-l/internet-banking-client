@@ -2,101 +2,87 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./styles/login.style";
+import { useForm } from "react-hook-form";
+import Recaptcha from "../../components/recaptcha";
 
 // 로그인 페이지
 export default function Login() {
-  const [userid, setUserid] = useState("");
-  const [userpw, setUserpw] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const useridInputRef = useRef(null);
-  const userpwInputRef = useRef(null);
-
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
-  const handleUseridInputChange = () => {
-    if (useridInputRef.current) {
-      setUserid(useridInputRef.current.value);
+  // Google captcha
+  const [captchaToken, setCaptchaToken] = useState(null);
+
+  // POST: 로그인
+  const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    if (!captchaToken) {
+      alert("봇 인증 검사를 진행해주세요.");
+      return;
+    }
+
+    const response = await axios.post("api/login/verify-captcha", {
+      token: captchaToken,
+    });
+    if (response.status === 200) {
+      // POST: 로그인
+      const loginPostURL = `api/login`;
+      axios
+        ?.post(loginPostURL, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        ?.then((res) => {
+          console.log(res);
+
+          if (res.status === 200) {
+            navigate("/home");
+          }
+        })
+        ?.catch(() => {
+          alert("로그인 실패");
+        });
     }
   };
-  const handleUserpwInputChange = () => {
-    if (userpwInputRef.current) {
-      setUserpw(userpwInputRef.current.value);
-    }
-  };
 
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
-
-    if (!userid) {
-      return alert("아이디를 입력하세요");
-    }
-    if (!userpw) {
-      return alert("비밀번호를 입력하세요");
-    }
-
-    const body = {
-      userid,
-      userpw,
-    };
-
-    // POST: 로그인
-    const loginPostURL = `api/account/login`;
-    axios
-      ?.post(loginPostURL, body, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      ?.then((res) => {
-        console.log(res);
-
-        if (res.status === 200) {
-          navigate("/home");
-        }
-      })
-      ?.catch(() => {
-        alert("로그인 실패");
-        setIsLoading(false);
-      });
-    setIsLoading(true);
+  const handleCaptchaVerify = (token) => {
+    setCaptchaToken(token);
   };
 
   return (
-    <>
-      <S.Container onClick={(e) => e.stopPropagation()}>
-        <S.InnerContainer>
-          <S.Header>
-            <S.Title>로그인</S.Title>
-          </S.Header>
-          <S.FormWrapper>
-            <S.Form onSubmit={handleLoginSubmit}>
-              <S.Input
-                onChange={handleUseridInputChange}
-                type="text"
-                value={userid}
-                placeholder="아이디"
-                ref={useridInputRef}
-              />
-              <S.Input
-                onChange={handleUserpwInputChange}
-                type="password"
-                value={userpw}
-                placeholder="비밀번호"
-                ref={userpwInputRef}
-              />
-              <S.LoginButton type="submit" disabled={isLoading}>
-                로그인
-              </S.LoginButton>
-            </S.Form>
-            <S.SignupHeader>아직 계정이 없으신가요?</S.SignupHeader>
-            <S.SignupButton>
-              <Link to={"/signup"}>회원가입하기 &rarr;</Link>
-            </S.SignupButton>
-          </S.FormWrapper>
-        </S.InnerContainer>
-      </S.Container>
-    </>
+    <S.FormWrapper
+      onClick={(e) => e.stopPropagation()}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <S.FormContent>
+        <S.Header>
+          <S.Title>BANK!T</S.Title>
+        </S.Header>
+        <S.Input
+          type="text"
+          placeholder="아이디"
+          {...register("client_id", { required: true, maxLength: 20 })}
+        />
+        <S.Input
+          type="password"
+          placeholder="비밀번호"
+          {...register("client_pw", { required: true, maxLength: 20 })}
+        />
+        <S.LoginButton>로그인</S.LoginButton>
+        <Recaptcha onVerify={handleCaptchaVerify} />
+        <S.SignupHeader>아직 계정이 없으신가요?</S.SignupHeader>
+        <S.SignupButton>
+          <Link to={"/signup"}>회원가입하기 &rarr;</Link>
+        </S.SignupButton>
+      </S.FormContent>
+    </S.FormWrapper>
   );
 }

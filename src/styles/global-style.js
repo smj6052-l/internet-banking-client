@@ -15,9 +15,10 @@ export const GlobalStyle = createGlobalStyle`
     --btm-navbar-height: ${BOTTOM_NAVBAR_HEIGTH};
     --btm-sheet-height: ${BOTTOM_SHEET_HEIGHT};
     /* 프로젝트 색상 */
-    --primary-color: rgba(22, 49, 114, 1);
-    --secondary-color: rgba(30, 86, 160, 1);
-    --tertiary-color: rgba(214, 228, 240, 1);
+    --primary-color: rgba(255, 119, 16, 1);
+    --secondary-color: rgba(255, 137, 88, 1);
+    --tertiary-color: rgba(255, 161, 143, 1);
+    --quaternary-color: rgba(255, 190, 193,1);
     --main-bg-color: rgba(246, 246, 246, 1);
     
   }
