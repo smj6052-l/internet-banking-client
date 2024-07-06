@@ -88,7 +88,7 @@ export default function AccountBlock({ accountId, color, title, balance }) {
               e.stopPropagation();
             }}
           >
-            <Link to={"/account/1"}>이체</Link>
+            <Link to={`/transfer/${accountId}`}>이체</Link>
           </Button>
         </ButtonContainer>
       </Link>

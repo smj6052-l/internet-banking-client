@@ -5,8 +5,7 @@ import Signup from "./routes/signup/signup";
 import Profile from "./routes/profile/profile";
 import AccountPage from "./routes/account/account-page";
 import Home from "./routes/home/home";
-import Withdraw from "./routes/withdraw/withdraw";
-import Deposit from "./routes/deposit/deposit";
+import Transfer from "./routes/transfer/transfer";
 
 export const router = createBrowserRouter([
   {
@@ -40,15 +39,10 @@ export const router = createBrowserRouter([
         path: "account/:accountId",
         element: <AccountPage />,
       },
-      // 이체(출금) 페이지 ()
+      // 입출금 페이지
       {
-        path: "withdraw",
-        element: <Withdraw />,
-      },
-      // 이체(입금) 페이지 ()
-      {
-        path: "deposit",
-        element: <Deposit />,
+        path: "transfer/:accountId",
+        element: <Transfer />,
       },
     ],
   },
