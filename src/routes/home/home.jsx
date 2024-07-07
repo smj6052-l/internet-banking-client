@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AccountBlock from "../../components/account-block";
 import * as S from "./styles/home.style";
 import axios from "axios";
@@ -6,93 +6,54 @@ import { MdAccountBalance } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-// DB에서 받아올 계좌 정보
-// DB에서 account를 받아 일반 입출금 / 메인을 나눠야됨
-// type을 주어 계좌 구분
-const accountData = [
-  {
-    color: "#3aafa9",
-    account_id: 1,
-    account_name: "NH1934우대통장(저축)",
-    account_balance: "4,661원",
-    account_type: "normal",
-  },
-  {
-    color: "#f8e9a1",
-    account_id: 2,
-    account_name: "계좌번호 ★",
-    account_balance: "0원",
-    account_type: "normal",
-  },
-  {
-    color: "#fd7272",
-    account_id: 3,
-    account_name: "스키장 🏂",
-    account_balance: "300000원",
-    account_type: "normal",
-  },
-
-  {
-    color: "#6a8fe9",
-    account_id: 4,
-    account_name: "모임통장1",
-    account_balance: "200400원",
-    account_type: "joint",
-  },
-  {
-    color: "#fea47f",
-    account_id: 5,
-    account_name: "모임통장2",
-    account_balance: "0원",
-    account_type: "joint",
-  },
-  {
-    color: "#3aafa9",
-    account_id: 6,
-    account_name: "모임통장3",
-    account_balance: "0원",
-    account_type: "joint",
-  },
-];
-
 // 메인 홈
 export default function Home() {
   const [myAccounts, setMyAccounts] = useState([]);
+  const [clientName, setClientName] = useState("");
+
+  // GET: 사용자 계좌 목록
+  const readMyAccounts = async () => {
+    const myAccountsListURL = "api/account";
+    await axios
+      .get(myAccountsListURL)
+      .then((res) => {
+        if (res.status === 200) {
+          setClientName(res.data.client);
+          setMyAccounts(res.data.accounts);
+        }
+      })
+      .catch(() => {
+        alert("계좌 정보를 불러오는데 실패했습니다.");
+      });
+  };
+
   useEffect(() => {
-    const readMyAccounts = async () => {
-      const myAccountsListURL = "api/account";
-      const response = await axios.get(myAccountsListURL);
-      console.log("🚀 ~ readMyAccounts ~ response:", response);
-      setMyAccounts(response);
-    };
     readMyAccounts();
   }, []);
 
   return (
     <S.Container>
       <S.InnerContainer>
+        {/* 헤더 */}
         <S.Header>
           <S.HeaderLeft>
-            <S.IconBig>
-              {/* 프로필 이미지 */}
-              {/* <MdAccountBalance /> */}
-            </S.IconBig>
-            <S.UserName>서민정님</S.UserName>
+            <S.UserName>{clientName}</S.UserName>
           </S.HeaderLeft>
-          <S.ViewAccount>내 계좌</S.ViewAccount>
+          <S.IconBig>
+            {/* 프로필 이미지 */}
+            {/* <MdAccountBalance /> */}
+          </S.IconBig>
         </S.Header>
+        {/* 계좌 목록 */}
         <S.AccountList>
-          {accountData.map((account, index) => (
-            //    // account_pk 이슈
-            // <Link
-            // key={account.account_id} to={`/account/${account.account_id}`}>
+          {myAccounts.map((account, index) => (
             <AccountBlock
               key={index}
-              accountId={account.accountId}
               color={account.color}
-              account_name={account.account_name}
-              account_balance={account.account_balance}
-              account_type={account.account_type}
+              accountId={account.account_pk}
+              accountNumber={account.account_number}
+              name={account.account_name}
+              balance={account.account_balance}
             />
             // </Link>
           ))}

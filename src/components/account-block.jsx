@@ -4,7 +4,14 @@ import styled from "styled-components";
 const ClickableBlock = styled.div`
   width: 100%;
   height: fit-content;
-  background-color: ${(props) => props.color};
+  /* background-color: ${(props) => props.color}; */
+  border: 2px solid var(--secondary-color);
+  background: rgb(255, 252, 250);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 252, 250, 1) 0%,
+    rgba(241, 191, 155, 1) 100%
+  );
   border-radius: 1rem;
   padding: 1.5rem 1.2rem 1rem 1.2rem;
   margin-bottom: 0.9rem;
@@ -12,16 +19,29 @@ const ClickableBlock = styled.div`
   color: black;
 `;
 
-const AccountHeader = styled.div`
+const AccountInfo = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+  align-items: start;
+  margin-bottom: 1rem;
 `;
 
-const AccountTitle = styled.div`
+const NameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+const AccountName = styled.div`
   font-size: 1rem;
   font-weight: bold;
+`;
+
+const AccountPhoto = styled.div`
+  width: 3rem;
+  height: 3rem;
+`;
+const AccountNumber = styled.div`
+  letter-spacing: 0.1rem;
 `;
 
 const Balance = styled.div`
@@ -30,13 +50,14 @@ const Balance = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  margin-top: 1rem;
+  margin-top: -2rem;
   display: flex;
   justify-content: space-between;
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => props.color};
+  /* background-color: ${(props) => props.color}; */
+  background-color: var(--secondary-color);
   width: 5rem;
   height: 2.6rem;
   color: white;
@@ -76,18 +97,26 @@ const Button = styled.button`
 // 블록: 홈에 노출될 계좌정보 (계좌명, 이체)
 export default function AccountBlock({
   accountId,
+  accountNumber,
   color,
-  account_name,
-  account_balance,
-  account_type,
+  name,
+  balance,
 }) {
   return (
     <ClickableBlock color={color}>
       <Link to={`account/${accountId}`}>
-        <AccountHeader>
-          <AccountTitle>{account_name}</AccountTitle>
-          <Balance>{account_balance}</Balance>
-        </AccountHeader>
+        <AccountInfo>
+          {/* 계좌 사진 */}
+          <AccountPhoto></AccountPhoto>
+          {/* 잔액 */}
+          <Balance>{balance}원</Balance>
+        </AccountInfo>
+        <NameContainer>
+          {/* 계좌명 */}
+          <AccountName>{name}</AccountName>
+          {/* 계좌번호 */}
+          <AccountNumber>{accountNumber}</AccountNumber>
+        </NameContainer>
         <ButtonContainer>
           <Button
             color={color}
