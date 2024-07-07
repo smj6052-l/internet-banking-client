@@ -6,13 +6,13 @@ export const Container = styled.div`
   background-color: white;
 `;
 export const InnerContainer = styled.div`
+  width: 85%;
   position: absolute;
   top: 5%;
   left: 50%;
   transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
-  width: 20em;
   padding-bottom: var(--btm-navbar-height);
 `;
 
