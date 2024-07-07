@@ -1,9 +1,12 @@
-import styled from 'styled-components';
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-const ClickableBlock  = styled.div`
+const ClickableBlock = styled.div`
+  width: 100%;
+  height: fit-content;
   background-color: ${(props) => props.color};
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 1.5rem 1.2rem 1rem 1.2rem;
   margin-bottom: 0.9rem;
   box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
   color: black;
@@ -13,6 +16,7 @@ const AccountHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
 `;
 
 const AccountTitle = styled.div`
@@ -32,10 +36,12 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #4CAF50; // A pleasant green color
+  background-color: ${(props) => props.color};
+  width: 5rem;
+  height: 2.6rem;
   color: white;
-  padding: 0.7rem 1.2rem;
-  margin-left:auto;
+  /* padding: 0.7rem 1.2rem; */
+  margin-left: auto;
   border: none;
   border-radius: 2rem; // Fully rounded corners
   font-size: 0.9rem;
@@ -44,41 +50,55 @@ const Button = styled.button`
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  filter: brightness(95%);
+
   &:hover {
-    background-color: #45a049;
-    box-shadow: 0 4px 8px rgba(69, 160, 73, 0.5);
+    filter: brightness(90%);
+    box-shadow: 0px 0px 0px 1px rgb(0 0 0 / 0.06),
+      0px 1px 1px -0.5px rgb(0 0 0 / 0.06), 0px 3px 3px -1.5px rgb(0 0 0 / 0.06),
+      0px 6px 6px -3px rgb(0 0 0 / 0.06), 0px 12px 12px -6px rgb(0 0 0 / 0.06),
+      0px 24px 24px -12px rgb(0 0 0 / 0.06);
     transform: translateY(-2px);
   }
 
   &:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(69, 160, 73, 0.5);
+    box-shadow: 0px 0px 0px 1px rgb(0 0 0 / 0.06),
+      0px 1px 1px -0.5px rgb(0 0 0 / 0.06), 0px 3px 3px -1.5px rgb(0 0 0 / 0.06),
+      0px 6px 6px -3px rgb(0 0 0 / 0.06), 0px 12px 12px -6px rgb(0 0 0 / 0.06),
+      0px 24px 24px -12px rgb(0 0 0 / 0.06);
   }
-
 `;
 
 // 블록: 홈에 노출될 계좌정보 (계좌명, 이체)
-export default function AccountBlock({ color, account_name, account_balance,account_type}) {
-
-  const handleClick=()=>{
-      // type에 따라 연결되는 계좌 생성 페이지가 달라짐
-  };
-
+export default function AccountBlock({
+  accountId,
+  color,
+  account_name,
+  account_balance,
+  account_type,
+}) {
   return (
-    <ClickableBlock  color={color} onClick={handleClick}>
-      <AccountHeader>
-        <AccountTitle>{account_name}</AccountTitle>
-        <Balance>{account_balance}</Balance>
-      </AccountHeader>
-      <ButtonContainer>
-        <Button onClick={(e) => e.stopPropagation()}>이체</Button>
-      </ButtonContainer>
+    <ClickableBlock color={color}>
+      <Link to={`account/${accountId}`}>
+        <AccountHeader>
+          <AccountTitle>{account_name}</AccountTitle>
+          <Balance>{account_balance}</Balance>
+        </AccountHeader>
+        <ButtonContainer>
+          <Button
+            color={color}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <Link to={`/transfer/${accountId}`}>이체</Link>
+          </Button>
+        </ButtonContainer>
+      </Link>
     </ClickableBlock>
   );
 }
