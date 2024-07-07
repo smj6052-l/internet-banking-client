@@ -12,8 +12,10 @@ import { IoIosSettings } from "react-icons/io";
 // 목록에서 계좌 정보 가져올 때도 인증을 하고 사용자를 확인 후 데이터를 가져오기
 export default function AccountPage() {
   const { accountId } = useParams();
+  const [isOpen, setOpen] = useState(false);
 
   //계좌 정보 받아오기
+  
   // 임시  데이터
   const accountData = 
     {
