@@ -1,83 +1,56 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AccountBlock from "../../components/account-block";
 import * as S from "./styles/home.style";
 import axios from "axios";
 
-// DB에서 받아올 계좌 정보
-const accountData = [
-  {
-    accountId: 1,
-    color: "#3aafa9",
-    title: "NH1934우대통장(저축)",
-    balance: "4,661원",
-  },
-  {
-    accountId: 1,
-    color: "#f8e9a1",
-    title: "계좌번호 ★",
-    balance: "0원",
-  },
-  {
-    accountId: 1,
-    color: "#fd7272",
-    title: "스키장 🏂",
-    balance: "300000원",
-  },
-
-  {
-    accountId: 1,
-    color: "#6a8fe9",
-    title: "모임통장1",
-    balance: "200400원",
-  },
-  {
-    accountId: 1,
-    color: "#fea47f",
-    title: "모임통장2",
-    balance: "0원",
-  },
-  {
-    accountId: 1,
-    color: "#3aafa9",
-    title: "모임통장3",
-    balance: "0원",
-  },
-];
-
 // 메인 홈
 export default function Home() {
   const [myAccounts, setMyAccounts] = useState([]);
+  const [clientName, setClientName] = useState("");
+
+  // GET: 사용자 계좌 목록
+  const readMyAccounts = async () => {
+    const myAccountsListURL = "api/account";
+    await axios
+      .get(myAccountsListURL)
+      .then((res) => {
+        if (res.status === 200) {
+          setClientName(res.data.client);
+          setMyAccounts(res.data.accounts);
+        }
+      })
+      .catch(() => {
+        alert("계좌 정보를 불러오는데 실패했습니다.");
+      });
+  };
+
   useEffect(() => {
-    const readMyAccounts = async () => {
-      const myAccountsListURL = "api/account";
-      const response = await axios.get(myAccountsListURL);
-      console.log("🚀 ~ readMyAccounts ~ response:", response);
-      setMyAccounts(response);
-    };
     readMyAccounts();
   }, []);
 
   return (
     <S.Container>
       <S.InnerContainer>
+        {/* 헤더 */}
         <S.Header>
           <S.HeaderLeft>
-            <S.IconBig>
-              {/* 프로필 이미지 */}
-              {/* <MdAccountBalance /> */}
-            </S.IconBig>
-            <S.UserName>서민정님</S.UserName>
+            <S.UserName>{clientName}</S.UserName>
           </S.HeaderLeft>
-          <S.ViewAccount>내 계좌</S.ViewAccount>
+          <S.IconBig>
+            {/* 프로필 이미지 */}
+            {/* <MdAccountBalance /> */}
+          </S.IconBig>
         </S.Header>
+        {/* 계좌 목록 */}
         <S.AccountList>
-          {accountData.map((account, index) => (
+          {myAccounts.map((account, index) => (
             <AccountBlock
               key={index}
-              accountId={account.accountId}
               color={account.color}
-              title={account.title}
-              balance={account.balance}
+              accountId={account.account_pk}
+              accountNumber={account.account_number}
+              name={account.account_name}
+              balance={account.account_balance}
             />
           ))}
         </S.AccountList>
