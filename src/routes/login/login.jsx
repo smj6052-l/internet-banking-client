@@ -21,7 +21,6 @@ export default function Login() {
 
   // POST: 로그인
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
     if (!captchaToken) {
       alert("봇 인증 검사를 진행해주세요.");
       return;
@@ -30,7 +29,9 @@ export default function Login() {
     const response = await axios.post("api/login/verify-captcha", {
       token: captchaToken,
     });
+    console.log("🚀 ~ onSubmit ~ response:", response);
     if (response.status === 200) {
+      console.log("🚀 ~ onSubmit ~ response:", response);
       // POST: 로그인
       const loginPostURL = `api/login`;
       axios
@@ -41,14 +42,34 @@ export default function Login() {
           withCredentials: true,
         })
         ?.then((res) => {
-          console.log(res);
-
           if (res.status === 200) {
             navigate("/home");
+            alert(res.data?.message);
           }
         })
-        ?.catch(() => {
-          alert("로그인 실패");
+        .catch((error) => {
+          if (error.response) {
+            switch (error.response.status) {
+              // 로그인 실패
+              case 400:
+                alert(error.response.data.message);
+                break;
+              // 로그인 시도 횟수 초과
+              case 403:
+                alert(error.response.data.message);
+                break;
+              // 서버 에러
+              case 500:
+                alert(error.response.data.message);
+                break;
+              default:
+                alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
+                break;
+            }
+            location.reload();
+          } else {
+            alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
+          }
         });
     }
   };
