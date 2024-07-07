@@ -29,9 +29,7 @@ export default function Login() {
     const response = await axios.post("api/login/verify-captcha", {
       token: captchaToken,
     });
-    console.log("🚀 ~ onSubmit ~ response:", response);
     if (response.status === 200) {
-      console.log("🚀 ~ onSubmit ~ response:", response);
       // POST: 로그인
       const loginPostURL = `api/login`;
       axios
