@@ -12,8 +12,8 @@ export const InnerContainer = styled.div`
   transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
-  width: 20em;
-  padding-bottom: var(--btm-navbar-height);
+  width: 20em; 
+  margin-bottom:30rem;
 `;
 
 export const Header = styled.div`
@@ -56,4 +56,17 @@ export const IconBig = styled.div`
 export const AccountList = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+export const IconBiger = styled.div`
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const EmptyBox = styled.div`
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
 `;

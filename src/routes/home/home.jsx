@@ -2,45 +2,56 @@ import React, { useEffect, useState } from "react";
 import AccountBlock from "../../components/account-block";
 import * as S from "./styles/home.style";
 import axios from "axios";
+import { MdAccountBalance } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 // DB에서 받아올 계좌 정보
+// DB에서 account를 받아 일반 입출금 / 메인을 나눠야됨
+// type을 주어 계좌 구분
 const accountData = [
   {
-    accountId: 1,
     color: "#3aafa9",
-    title: "NH1934우대통장(저축)",
-    balance: "4,661원",
+    account_id: 1,
+    account_name: "NH1934우대통장(저축)",
+    account_balance: "4,661원",
+    account_type: "normal",
   },
   {
-    accountId: 1,
     color: "#f8e9a1",
-    title: "계좌번호 ★",
-    balance: "0원",
+    account_id: 2,
+    account_name: "계좌번호 ★",
+    account_balance: "0원",
+    account_type: "normal",
   },
   {
-    accountId: 1,
     color: "#fd7272",
-    title: "스키장 🏂",
-    balance: "300000원",
+    account_id: 3,
+    account_name: "스키장 🏂",
+    account_balance: "300000원",
+    account_type: "normal",
   },
 
   {
-    accountId: 1,
     color: "#6a8fe9",
-    title: "모임통장1",
-    balance: "200400원",
+    account_id: 4,
+    account_name: "모임통장1",
+    account_balance: "200400원",
+    account_type: "joint",
   },
   {
-    accountId: 1,
     color: "#fea47f",
-    title: "모임통장2",
-    balance: "0원",
+    account_id: 5,
+    account_name: "모임통장2",
+    account_balance: "0원",
+    account_type: "joint",
   },
   {
-    accountId: 1,
     color: "#3aafa9",
-    title: "모임통장3",
-    balance: "0원",
+    account_id: 6,
+    account_name: "모임통장3",
+    account_balance: "0원",
+    account_type: "joint",
   },
 ];
 
@@ -72,15 +83,25 @@ export default function Home() {
         </S.Header>
         <S.AccountList>
           {accountData.map((account, index) => (
+            //    // account_pk 이슈
+            // <Link
+            // key={account.account_id} to={`/account/${account.account_id}`}>
             <AccountBlock
               key={index}
               accountId={account.accountId}
               color={account.color}
-              title={account.title}
-              balance={account.balance}
+              account_name={account.account_name}
+              account_balance={account.account_balance}
+              account_type={account.account_type}
             />
+            // </Link>
           ))}
         </S.AccountList>
+        <S.EmptyBox>
+          <S.IconBiger>
+            <FaPlus />
+          </S.IconBiger>
+        </S.EmptyBox>
       </S.InnerContainer>
     </S.Container>
   );

@@ -9,6 +9,7 @@ const ClickableBlock = styled.div`
   padding: 1.5rem 1.2rem 1rem 1.2rem;
   margin-bottom: 0.9rem;
   box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
+  color: black;
 `;
 
 const AccountHeader = styled.div`
@@ -73,13 +74,19 @@ const Button = styled.button`
 `;
 
 // 블록: 홈에 노출될 계좌정보 (계좌명, 이체)
-export default function AccountBlock({ accountId, color, title, balance }) {
+export default function AccountBlock({
+  accountId,
+  color,
+  account_name,
+  account_balance,
+  account_type,
+}) {
   return (
     <ClickableBlock color={color}>
       <Link to={`account/${accountId}`}>
         <AccountHeader>
-          <AccountTitle>{title}</AccountTitle>
-          <Balance>{balance}</Balance>
+          <AccountTitle>{account_name}</AccountTitle>
+          <Balance>{account_balance}</Balance>
         </AccountHeader>
         <ButtonContainer>
           <Button
