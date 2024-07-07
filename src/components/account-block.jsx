@@ -16,6 +16,7 @@ const ClickableBlock = styled.div`
   padding: 1.5rem 1.2rem 1rem 1.2rem;
   margin-bottom: 0.9rem;
   box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
+  color: black;
 `;
 
 const AccountInfo = styled.div`

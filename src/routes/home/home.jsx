@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import AccountBlock from "../../components/account-block";
 import * as S from "./styles/home.style";
 import axios from "axios";
+import { MdAccountBalance } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 // 메인 홈
 export default function Home() {
@@ -52,8 +55,14 @@ export default function Home() {
               name={account.account_name}
               balance={account.account_balance}
             />
+            // </Link>
           ))}
         </S.AccountList>
+        <S.EmptyBox>
+          <S.IconBiger>
+            <FaPlus />
+          </S.IconBiger>
+        </S.EmptyBox>
       </S.InnerContainer>
     </S.Container>
   );
