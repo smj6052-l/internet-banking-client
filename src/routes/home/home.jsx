@@ -48,7 +48,6 @@ export default function Home() {
           {myAccounts.map((account, index) => (
             <AccountBlock
               key={index}
-              color={account.color}
               accountId={account.account_pk}
               accountNumber={account.account_number}
               name={account.account_name}
