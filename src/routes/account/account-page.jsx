@@ -1,26 +1,14 @@
-// 계좌 페이지
-import { useState } from "react";
-import { useParams, useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TransferHistory from "../../components/transfer-history";
 import * as S from "./styles/account-page.style";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoIosSettings } from "react-icons/io";
-import DetailModal from "../../components/transfer-detail-modal";
 
+// 계좌 페이지
 export default function AccountPage() {
-  const { accountId } = useParams();
   const location = useLocation();
-  const [isOpen, setOpen] = useState(false);
 
   const accountData = location.state || {};
-
-  // //임시  데이터
-  // const accountData = {
-  //   account_name: "NH1934",
-  //   account_balance: "4,661원",
-  //   account_type: "normal",
-  //   account_number: "3333-09-5576906",
-  // };
 
   return (
     <S.Wrapper>
@@ -30,9 +18,7 @@ export default function AccountPage() {
           <IoArrowBackOutline />
         </S.HeaderButton>
         {/* 계좌명 */}
-        <S.AccountName>
-          {accountId} {accountData.name}
-        </S.AccountName>
+        <S.AccountName>{accountData.name}</S.AccountName>
         <S.HeaderButton>
           <IoIosSettings />
         </S.HeaderButton>
