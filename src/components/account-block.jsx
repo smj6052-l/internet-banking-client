@@ -55,15 +55,13 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  /* background-color: ${(props) => props.color}; */
   background-color: var(--secondary-color);
   width: 5rem;
   height: 2.6rem;
   color: white;
-  /* padding: 0.7rem 1.2rem; */
   margin-left: auto;
   border: none;
-  border-radius: 2rem; // Fully rounded corners
+  border-radius: 2rem;
   font-size: 0.9rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -93,7 +91,6 @@ const Button = styled.button`
   }
 `;
 
-// 블록: 홈에 노출될 계좌정보 (계좌명, 이체)
 export default function AccountBlock({
   accountId,
   accountNumber,
@@ -104,14 +101,12 @@ export default function AccountBlock({
 
   const handleTransferClick = (e) => {
     e.stopPropagation();
-    navigate(`/transfer/${accountId}`);
+    navigate(`/transfer/${accountId}`, {
+      state: { accountData: { accountNumber }, action: "send" },
+    });
   };
 
   return (
-    // <ClickableBlock>
-    //   {/* 보안 질문 */}
-    //   <Link to={`/account/${accountId}/transations`}
-    //   state={{ accountId, accountNumber, name, balance }}>
     <ClickableBlock
       onClick={() =>
         navigate(`/account/${accountId}`, { // /transactions
@@ -120,15 +115,11 @@ export default function AccountBlock({
       }
     >
       <AccountInfo>
-        {/* 계좌 사진 */}
         <AccountPhoto></AccountPhoto>
-        {/* 잔액 */}
         <Balance>{balance}원</Balance>
       </AccountInfo>
       <NameContainer>
-        {/* 계좌명 */}
         <AccountName>{name}</AccountName>
-        {/* 계좌번호 */}
         <AccountNumber>{accountNumber}</AccountNumber>
       </NameContainer>
       <ButtonContainer>

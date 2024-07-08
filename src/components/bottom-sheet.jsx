@@ -5,7 +5,7 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   position: fixed;
   z-index: 10;
-  top: 30vh;
+  top: 40vh;
   left: 0;
   right: 0;
   border-top-left-radius: 1.5rem;
@@ -22,7 +22,6 @@ const HeaderWrapper = styled(motion.div)`
   position: relative;
   padding-top: 16px;
   padding-bottom: 4px;
-  background-color: var(--secondary-color);
 `;
 const HandleBar = styled(motion.div)`
   width: 32px;

@@ -1,6 +1,5 @@
-// 계좌 페이지
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
 import TransferHistory from "../../components/transfer-history";
 import * as S from "./styles/account-page.style";
 import { IoArrowBackOutline } from "react-icons/io5";
@@ -8,8 +7,10 @@ import { IoIosSettings } from "react-icons/io";
 
 // 계좌 페이지
 export default function AccountPage() {
+  const { accountId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+
   const [isOpen, setOpen] = useState(false);
 
   const accountData = location.state || {};
@@ -53,8 +54,24 @@ export default function AccountPage() {
         <S.AccountBalance>{accountData.balance}</S.AccountBalance>
       </S.AccountInfo>
       <S.ButtonGroup>
-        <S.ActionButton onClick={handleTransferClick}>이체하기</S.ActionButton>
-        <S.ActionButton>가져오기</S.ActionButton>
+        <S.ActionButton
+          onClick={() =>
+            navigate(`/transfer/${accountId}`, {
+              state: { accountData, action: "send" },
+            })
+          }
+        >
+          이체하기
+        </S.ActionButton>
+        <S.ActionButton
+          onClick={() =>
+            navigate(`/transfer/${accountId}`, {
+              state: { accountData, action: "receive" },
+            })
+          }
+        >
+          가져오기
+        </S.ActionButton>
       </S.ButtonGroup>
       {/* 하단부: 입출금 내역 */}
       <TransferHistory />
