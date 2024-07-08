@@ -1,9 +1,9 @@
 import styled from "styled-components";
+import { FaPlus } from "react-icons/fa";
 
-export const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: white;
+export const Wrapper = styled.div`
+  width: 100vw;
+  background-color: var(--main-bg-color);
 `;
 export const InnerContainer = styled.div`
   width: 85%;
@@ -13,6 +13,7 @@ export const InnerContainer = styled.div`
   transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   padding-bottom: var(--btm-navbar-height);
 `;
 
@@ -58,15 +59,20 @@ export const AccountList = styled.div`
   flex-direction: column;
 `;
 
-export const IconBiger = styled.div`
-  font-size: 4rem;
+export const AccountAddBtn = styled.button`
+  width: 100%;
+  height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-export const EmptyBox = styled.div`
-  border-radius: 1rem;
+  border-radius: 2rem;
   padding: 1.5rem;
   margin-bottom: 0.9rem;
+  background-color: var(--sub-bg-color);
+  border: 2px solid var(--primary-color);
   box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
+`;
+export const AddIcon = styled(FaPlus)`
+  font-size: 2rem;
+  color: var(--primary-color);
 `;

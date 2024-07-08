@@ -20,7 +20,7 @@ export const GlobalStyle = createGlobalStyle`
     --tertiary-color: rgba(255, 161, 143, 1);
     --quaternary-color: rgba(255, 190, 193,1);
     --main-bg-color: rgba(246, 246, 246, 1);
-    
+    --sub-bg-color: rgba(255, 237, 213, 1);
   }
 
   * {

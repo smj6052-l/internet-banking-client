@@ -12,8 +12,8 @@ const ClickableBlock = styled.div`
     rgba(255, 252, 250, 1) 0%,
     rgba(241, 191, 155, 1) 100%
   );
-  border-radius: 1rem;
-  padding: 1.5rem 1.2rem 1rem 1.2rem;
+  border-radius: 2rem;
+  padding: 1.5rem 1.3rem 1rem 1.5rem;
   margin-bottom: 0.9rem;
   box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.1);
   color: black;
