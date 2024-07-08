@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
       },
       // 계좌 내역 페이지 (잔액, 입출금 내역 조회 등)
       {
-        path: "account/:accountId/transactions",
+        path: "account/:accountId",
         element: <AccountPage />,
       },
       // 계좌 개설 페이지

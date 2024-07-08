@@ -57,8 +57,39 @@ export default function Transfer({ destinationAccount }) {
           navigate("/home");
         }
       })
-      .catch(() => {
-        alert("계좌 정보를 불러오는데 실패했습니다.");
+      .catch((err) => {
+        if (err.response) {
+          switch (err.response.status) {
+            // 유효하지 않은 입력
+            case 400:
+              if (err.response.data.message.includes("잔액이 부족")) {
+                alert("잔액이 부족합니다. 금액을 확인해주세요.");
+              } else {
+                alert("유효하지 않은 입력입니다. 입력 값을 확인해주세요.");
+              }
+              break;
+            // 원본 계좌 인증 실패
+            case 401:
+              alert("원본 계좌 인증에 실패했습니다.");
+              break;
+            // 목적지 계좌를 찾을 수 없음
+            case 404:
+              alert(
+                "목적지 계좌를 찾을 수 없습니다. 계좌 번호를 확인해주세요."
+              );
+              break;
+            // 서버 오류
+            case 500:
+              alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+              break;
+            default:
+              alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
+              break;
+          }
+          location.reload();
+        } else {
+          alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
+        }
       });
   };
 

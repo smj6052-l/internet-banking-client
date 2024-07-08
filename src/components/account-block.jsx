@@ -100,7 +100,6 @@ export default function AccountBlock({
   name,
   balance,
 }) {
-
   const navigate = useNavigate();
 
   const handleTransferClick = (e) => {
@@ -115,7 +114,7 @@ export default function AccountBlock({
     //   state={{ accountId, accountNumber, name, balance }}>
     <ClickableBlock
       onClick={() =>
-        navigate(`/account/${accountId}/transactions`, {
+        navigate(`/account/${accountId}`, {
           state: { accountId, accountNumber, name, balance },
         })
       }
@@ -133,9 +132,7 @@ export default function AccountBlock({
         <AccountNumber>{accountNumber}</AccountNumber>
       </NameContainer>
       <ButtonContainer>
-        <Button
-          onClick={handleTransferClick}
-        >
+        <Button onClick={handleTransferClick}>
           <Link to={`/transfer/${accountId}`}>이체</Link>
         </Button>
       </ButtonContainer>
