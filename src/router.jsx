@@ -7,6 +7,7 @@ import AccountPage from "./routes/account/account-page";
 import Home from "./routes/home/home";
 import Transfer from "./routes/transfer/transfer";
 import OpenAccountPage from "./routes/account/open-account-page";
+import GroupAccountPage from "./routes/account/group-account-page";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,11 @@ export const router = createBrowserRouter([
       {
         path: "transfer/:accountId",
         element: <Transfer />,
+      },
+      // 모임통장 페이지
+      {
+        path: "group-account",
+        element: <GroupAccountPage />,
       },
     ],
   },
