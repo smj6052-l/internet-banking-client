@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import DetailModal from "./transfer-detail-modal";
@@ -115,7 +115,7 @@ export default function TransferHistory() {
   //계좌 정보 받아오기
   // GET: 사용자 입출금 내역 확인
   const readMyTx = async () => {
-    const myTxListURL = `/api/account/${accountId}/transactions`;
+    const myTxListURL = `/api/transaction/${accountId}`;
     try {
       console.log("Fetching transactions from:", myTxListURL);
       const res = await axios.get(myTxListURL);
@@ -123,9 +123,12 @@ export default function TransferHistory() {
       if (res.status === 200) {
         if (res.data && res.data) {
           // 날짜 포맷 변경
-          const formattedTx = res.data.map(transaction => {
+          const formattedTx = res.data.map((transaction) => {
             const date = new Date(transaction.transaction_date);
-            const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+            const formattedDate = `${String(date.getMonth() + 1).padStart(
+              2,
+              "0"
+            )}.${String(date.getDate()).padStart(2, "0")}`;
             return {
               ...transaction,
               transaction_date: formattedDate,
