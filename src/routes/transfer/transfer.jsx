@@ -55,9 +55,8 @@ export default function Transfer() {
       transaction_destination_memo,
       account_pw,
     };
-    console.log("🚀 ~ Transfer ~ transferInfo:", transferInfo);
 
-    const transferURL = `/api/transaction/${accountId}/transfer`;
+    const transferURL = `/api/transaction/transfer`;
     await axios
       .post(transferURL, transferInfo, {
         headers: {
@@ -72,31 +71,10 @@ export default function Transfer() {
       })
       .catch((err) => {
         if (err.response) {
-          switch (err.response.status) {
-            case 400:
-              if (err.response.data.message.includes("잔액이 부족")) {
-                alert("잔액이 부족합니다. 금액을 확인해주세요.");
-              } else {
-                alert("유효하지 않은 입력입니다. 입력 값을 확인해주세요.");
-              }
-              break;
-            case 401:
-              alert("원본 계좌 인증에 실패했습니다.");
-              break;
-            case 404:
-              alert(
-                "목적지 계좌를 찾을 수 없습니다. 계좌 번호를 확인해주세요."
-              );
-              break;
-            case 500:
-              alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-              break;
-            default:
-              alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
-              break;
-          }
+          alert(err.response.data.message);
           location.reload();
         } else {
+          // 에러 처리 로직 필요
           alert("에러가 발생했습니다. 관리자에게 문의해주세요.");
         }
       });
