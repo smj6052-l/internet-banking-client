@@ -101,16 +101,15 @@ export default function TransferDetailModal({
   const handleEditClick = async () => {
     if (isEditing) {
       try {
-        // URL 수정 필요
         const response = await axios.post(
-          `/api/account/${transaction.transaction_destination}/transactions/${transaction.transaction_pk}/memo/update`,
+          `/api/transaction/${transaction.transaction_pk}/memo/update`,
           {
             transaction_memo: memo,
           }
         );
 
         if (response.status === 200) {
-          console.log("Memo updated successfully");
+          //console.log("Memo updated successfully");
           // 업데이트된 거래 내역을 가져와서 부모 컴포넌트에 알림
           // memo가 수정된 특정 transaction만 다시 조회
           onMemoUpdate(transaction.transaction_pk);
@@ -125,11 +124,11 @@ export default function TransferDetailModal({
   const handleDeleteClick = async () => {
     try {
       const response = await axios.post(
-        `/api/account/${transaction.transaction_destination}/transactions/${transaction.transaction_pk}/memo/delete`
+        `/api/transaction/${transaction.transaction_pk}/memo/delete`
       );
 
       if (response.status === 200) {
-        console.log("Transaction deleted successfully");
+        //console.log("Transaction deleted successfully");
         onMemoUpdate(transaction.transaction_pk);
         setMemo("");
         setIsEditing(false);
@@ -142,7 +141,8 @@ export default function TransferDetailModal({
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
       <ModalContent>
-        <Header>{transaction.transaction_name}</Header>
+        <Header>{transaction.transaction_name}
+        </Header>
         <SubHeader>
           {isEditing ? (
             <MemoInput

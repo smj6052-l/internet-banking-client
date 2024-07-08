@@ -144,7 +144,7 @@ export default function TransferHistory() {
 
   // 특정 거래 내역 다시 조회
   const fetchTransaction = async (transactionId) => {
-    const transactionURL = `/api/account/${accountId}/transactions/${transactionId}`;
+    const transactionURL = `/api/transaction/${accountId}/${transactionId}`;
     try {
       const res = await axios.get(transactionURL);
       if (res.status === 200) {

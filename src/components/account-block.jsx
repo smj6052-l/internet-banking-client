@@ -114,7 +114,7 @@ export default function AccountBlock({
     //   state={{ accountId, accountNumber, name, balance }}>
     <ClickableBlock
       onClick={() =>
-        navigate(`/account/${accountId}`, {
+        navigate(`/account/${accountId}`, { // /transactions
           state: { accountId, accountNumber, name, balance },
         })
       }
