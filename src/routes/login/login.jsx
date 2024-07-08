@@ -37,7 +37,6 @@ export default function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true,
         })
         ?.then((res) => {
           if (res.status === 200) {
