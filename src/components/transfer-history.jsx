@@ -1,8 +1,9 @@
-import styled from 'styled-components';
-import React, { useState }  from 'react';
-import DetailModal from './transfer-detail-modal';
+import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import DetailModal from "./transfer-detail-modal";
 import { IoSearchCircleOutline } from "react-icons/io5";
-
 
 const Container = styled.div`
   width: 100%;
@@ -15,7 +16,7 @@ const SearchHeader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  `;
+`;
 
 const SearchButton = styled.button`
   padding: initial;
@@ -57,7 +58,7 @@ const Transaction = styled.div`
 const TransactionDate = styled.div`
   width: 10%;
   font-size: 1rem;
-  margin-right:2rem;
+  margin-right: 2rem;
 `;
 
 const TransactionDetails = styled.div`
@@ -67,7 +68,7 @@ const TransactionDetails = styled.div`
 const TransactionName = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom:0.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 const TransactionMemo = styled.div`
@@ -75,12 +76,13 @@ const TransactionMemo = styled.div`
   color: #888;
 `;
 
+// transaction  type 확인하여 수정 필요
 const TransactionAmount = styled.div`
   text-align: right;
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom:0.5rem;
-  color: ${props => props.type === '출금' ? '#00A5FF' : 'initial'};
+  margin-bottom: 0.5rem;
+  color: ${(props) => (props.type === "출금" ? "#00A5FF" : "initial")};
 `;
 
 const TransactionBalance = styled.div`
@@ -89,11 +91,9 @@ const TransactionBalance = styled.div`
   color: #888;
 `;
 
-const DepositColor=styled.div`
-`;
-
 // 입출금 내역 목록
 export default function TransferHistory() {
+  const { accountId } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // DB에서 거래내역 가져옴
   const [transactions, setTransactions] = useState([]);
@@ -112,33 +112,57 @@ export default function TransferHistory() {
     setSelectedTransaction(null);
   };
 
-  // 임시 데이터
-  const txData = [
-    {
-      transaction_pk: 1,
-      transaction_date: '07.04',
-      transaction_name: '홍길동',
-      transaction_description: '정산',
-      transaction_amount: '10000',
-      transaction_balance: '15000',
-      transaction_type:"이체"
-    },
-    {
-      transaction_pk: 2,
-      transaction_date: '06.29',
-      transaction_name: '미미네 떡볶이',
-      transaction_description: '떡볶이 고구마튀김',
-      transaction_amount: '-5000',
-      transaction_balance: '5000',
-      transaction_type:"출금"
-    },
-    // 추가 거래 내역들...
-  ];
+  //계좌 정보 받아오기
+  // GET: 사용자 입출금 내역 확인
+  const readMyTx = async () => {
+    const myTxListURL = `/api/account/${accountId}/transactions`;
+    try {
+      console.log("Fetching transactions from:", myTxListURL);
+      const res = await axios.get(myTxListURL);
+
+      if (res.status === 200) {
+        if (res.data && res.data) {
+          // 날짜 포맷 변경
+          const formattedTx = res.data.map(transaction => {
+            const date = new Date(transaction.transaction_date);
+            const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+            return {
+              ...transaction,
+              transaction_date: formattedDate,
+            };
+          });
+
+          setTransactions(formattedTx);
+        } else {
+          console.error("Invalid API response format:", res.data);
+          alert(
+            "계좌 내역을 불러오는데 실패했습니다. API 응답 형식이 잘못되었습니다."
+          );
+        }
+      } else {
+        console.error("Unexpected HTTP status code:", res.status);
+        alert(
+          "계좌 내역을 불러오는데 실패했습니다. 서버에서 오류가 발생했습니다."
+        );
+      }
+    } catch (error) {
+      console.error("API request failed:", error);
+      alert(
+        "계좌 내역을 불러오는데 실패했습니다. 네트워크 오류가 발생했습니다."
+      );
+    }
+  };
+
+  useEffect(() => {
+    readMyTx();
+  }, [accountId]);
 
   return (
     <Container>
       <SearchHeader>
-        <SearchButton><IoSearchCircleOutline /></SearchButton>
+        <SearchButton>
+          <IoSearchCircleOutline />
+        </SearchButton>
         <FilterButton onClick={toggleMenu}>기간 ▼</FilterButton>
         {isMenuOpen && (
           <FilterMenu>
@@ -146,19 +170,28 @@ export default function TransferHistory() {
             <MenuItem>유형 선택</MenuItem>
           </FilterMenu>
         )}
-        </SearchHeader>
-      
-        <TransactionList>
-        {txData.map(transaction => (
-          <Transaction key={transaction.transaction_pk} onClick={() => openModal(transaction)}>
+      </SearchHeader>
+
+      <TransactionList>
+        {transactions.map((transaction) => (
+          <Transaction
+            key={transaction.transaction_pk}
+            onClick={() => openModal(transaction)}
+          >
             <TransactionDate>{transaction.transaction_date}</TransactionDate>
             <TransactionDetails>
               <TransactionName>{transaction.transaction_name}</TransactionName>
-              <TransactionMemo>{transaction.transaction_description}</TransactionMemo>
+              <TransactionMemo>
+                {transaction.transaction_description}
+              </TransactionMemo>
             </TransactionDetails>
             <TransactionDetails>
-              <TransactionAmount type={transaction.transaction_type}>{transaction.transaction_amount}원</TransactionAmount>
-              <TransactionBalance>{transaction.transaction_balance}원</TransactionBalance>
+              <TransactionAmount type={transaction.transaction_type}>
+                {transaction.transaction_amount}원
+              </TransactionAmount>
+              <TransactionBalance>
+                {transaction.transaction_balance}원
+              </TransactionBalance>
             </TransactionDetails>
           </Transaction>
         ))}
@@ -171,7 +204,6 @@ export default function TransferHistory() {
           transaction={selectedTransaction}
         />
       )}
-
     </Container>
   );
 }

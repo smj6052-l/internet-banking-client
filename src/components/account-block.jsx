@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const ClickableBlock = styled.div`
   width: 100%;
   height: fit-content;
-  /* background-color: ${(props) => props.color}; */
   border: 2px solid var(--secondary-color);
   background: rgb(255, 252, 250);
   background: linear-gradient(
@@ -98,36 +97,48 @@ const Button = styled.button`
 export default function AccountBlock({
   accountId,
   accountNumber,
-  color,
   name,
   balance,
 }) {
+
+  const navigate = useNavigate();
+
+  const handleTransferClick = (e) => {
+    e.stopPropagation();
+    navigate(`/transfer/${accountId}`);
+  };
+
   return (
-    <ClickableBlock color={color}>
-      <Link to={`account/${accountId}`}>
-        <AccountInfo>
-          {/* 계좌 사진 */}
-          <AccountPhoto></AccountPhoto>
-          {/* 잔액 */}
-          <Balance>{balance}원</Balance>
-        </AccountInfo>
-        <NameContainer>
-          {/* 계좌명 */}
-          <AccountName>{name}</AccountName>
-          {/* 계좌번호 */}
-          <AccountNumber>{accountNumber}</AccountNumber>
-        </NameContainer>
-        <ButtonContainer>
-          <Button
-            color={color}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <Link to={`/transfer/${accountId}`}>이체</Link>
-          </Button>
-        </ButtonContainer>
-      </Link>
+    // <ClickableBlock>
+    //   {/* 보안 질문 */}
+    //   <Link to={`/account/${accountId}/transations`}
+    //   state={{ accountId, accountNumber, name, balance }}>
+    <ClickableBlock
+      onClick={() =>
+        navigate(`/account/${accountId}/transactions`, {
+          state: { accountId, accountNumber, name, balance },
+        })
+      }
+    >
+      <AccountInfo>
+        {/* 계좌 사진 */}
+        <AccountPhoto></AccountPhoto>
+        {/* 잔액 */}
+        <Balance>{balance}원</Balance>
+      </AccountInfo>
+      <NameContainer>
+        {/* 계좌명 */}
+        <AccountName>{name}</AccountName>
+        {/* 계좌번호 */}
+        <AccountNumber>{accountNumber}</AccountNumber>
+      </NameContainer>
+      <ButtonContainer>
+        <Button
+          onClick={handleTransferClick}
+        >
+          <Link to={`/transfer/${accountId}`}>이체</Link>
+        </Button>
+      </ButtonContainer>
     </ClickableBlock>
   );
 }
