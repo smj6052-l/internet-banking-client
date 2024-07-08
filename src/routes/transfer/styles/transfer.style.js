@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
   height: 100vh;
   background-color: white;
   padding-bottom: var(--btm-navbar-height);
+  overflow: auto;
 `;
 
 export const FormContainer = styled.form`
@@ -16,20 +17,14 @@ export const FormContainer = styled.form`
 
 export const Header = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 4.5rem;
   background-color: var(--primary-color);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   letter-spacing: 0.1rem;
-`;
-
-export const AccountNumber = styled.div`
-  width: fit-content;
-  height: fit-content;
-  background-color: grey;
 `;
 
 export const DestinationAccountInput = styled.input`
@@ -41,19 +36,40 @@ export const DestinationAccountInput = styled.input`
   border: none;
   outline-color: var(--primary-color);
   letter-spacing: 0.1rem;
+  background-color: rgb(255, 243, 235);
 `;
 export const TransferAmount = styled.input`
   text-align: center;
   width: 80%;
   height: 4rem;
-  margin: 6rem auto;
+  margin: 5rem auto;
   font-size: 2rem;
   border: none;
   border-radius: 4rem;
   outline: none;
 `;
-export const OriginAccountSelect = styled.div`
-  margin: 1rem 2rem;
+export const OriginAccountContainer = styled.div`
+  position: relative;
+  width: 80%;
+  margin: 1rem auto;
+`;
+export const OriginAccountInput = styled.input`
+  width: 100%;
+  height: 2.5rem;
+  font-size: 1rem;
+  letter-spacing: 0.05rem;
+  margin: 0 auto;
+  padding-left: 2rem;
+  border-radius: 2rem;
+  border: 1px solid var(--secondary-color);
+  outline-color: var(--primary-color);
+`;
+export const IconWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
 `;
 export const MemoContainer = styled.div`
   display: flex;
@@ -81,6 +97,7 @@ export const MemoInput = styled.input`
   text-align: right;
   padding-right: 1rem;
   font-size: 1rem;
+  outline: none;
 `;
 
 export const NextBtn = styled.button`
@@ -104,15 +121,19 @@ export const BtmSheetContainer = styled.div`
 export const AccountPwInput = styled.input`
   width: 85%;
   height: 3.8rem;
-  border: none;
   font-size: 1.2rem;
   text-align: center;
+  border: 1px solid var(--primary-color);
   border-radius: 2rem;
+  margin: 0.5rem auto;
+  outline-color: var(--primary-color);
+  letter-spacing: 0.2rem;
+  background-color: rgb(255, 243, 235);
 `;
 export const TransferBtn = styled.button`
   width: 85%;
   height: 3.8rem;
-  margin: auto;
+  margin: 0 auto;
   background-color: var(--primary-color);
   color: white;
   letter-spacing: 0.1rem;
