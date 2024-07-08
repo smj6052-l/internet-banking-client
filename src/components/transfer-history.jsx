@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import DetailModal from "./transfer-detail-modal";
 import { IoSearchCircleOutline } from "react-icons/io5";
@@ -94,6 +94,7 @@ const TransactionBalance = styled.div`
 // 입출금 내역 목록
 export default function TransferHistory() {
   const { accountId } = useParams();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // DB에서 거래내역 가져옴
   const [transactions, setTransactions] = useState([]);
@@ -153,6 +154,7 @@ export default function TransferHistory() {
       alert(
         "계좌 내역을 불러오는데 실패했습니다. 네트워크 오류가 발생했습니다."
       );
+      navigate("/login");
     }
   };
 
