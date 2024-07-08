@@ -24,18 +24,15 @@ export default function Signup() {
   const [captchaToken, setCaptchaToken] = useState(null);
 
   // POST: 사용자 회원가입 정보 입력
-  const onSubmit = async (data) => {
-    // 서버에서 필요한 정보만 추출
-    const {
-      client_id,
-      client_name,
-      client_pw,
-      client_email,
-      client_phone,
-      client_address,
-      client_resi,
-    } = data;
-
+  const onSubmit = async ({
+    client_id,
+    client_name,
+    client_pw,
+    client_email,
+    client_phone,
+    client_address,
+    client_resi,
+  }) => {
     const body = {
       client_id,
       client_name,
