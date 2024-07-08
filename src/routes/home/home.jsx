@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import AccountBlock from "../../components/account-block";
 import * as S from "./styles/home.style";
 import axios from "axios";
-import { MdAccountBalance } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -32,7 +31,7 @@ export default function Home() {
   }, []);
 
   return (
-    <S.Container>
+    <S.Wrapper>
       <S.InnerContainer>
         {/* 헤더 */}
         <S.Header>
@@ -55,15 +54,14 @@ export default function Home() {
               name={account.account_name}
               balance={account.account_balance}
             />
-            // </Link>
           ))}
         </S.AccountList>
-        <S.EmptyBox>
-          <S.IconBiger>
-            <FaPlus />
-          </S.IconBiger>
-        </S.EmptyBox>
+        <Link to={"/open-account"}>
+          <S.AccountAddBtn>
+            <S.AddIcon />
+          </S.AccountAddBtn>
+        </Link>
       </S.InnerContainer>
-    </S.Container>
+    </S.Wrapper>
   );
 }
