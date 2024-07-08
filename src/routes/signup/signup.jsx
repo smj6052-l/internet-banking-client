@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -23,21 +23,16 @@ export default function Signup() {
 
   const [captchaToken, setCaptchaToken] = useState(null);
 
-  const fileInputRef = useRef(null);
-
   // POST: 사용자 회원가입 정보 입력
-  const onSubmit = async (data) => {
-    // 서버에서 필요한 정보만 추출
-    const {
-      client_id,
-      client_name,
-      client_pw,
-      client_email,
-      client_phone,
-      client_address,
-      client_resi,
-    } = data;
-
+  const onSubmit = async ({
+    client_id,
+    client_name,
+    client_pw,
+    client_email,
+    client_phone,
+    client_address,
+    client_resi,
+  }) => {
     const body = {
       client_id,
       client_name,
@@ -82,16 +77,10 @@ export default function Signup() {
           alert("회원가입 성공");
           navigate("/login");
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log("🚀 ~ onSubmit ~ err:", err.response.data);
           alert("회원가입 실패");
         });
-    }
-  };
-
-  // Click: 대표 사진 등록
-  const handleFileInputClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
     }
   };
 
@@ -229,15 +218,6 @@ export default function Signup() {
             required
             {...register("client_name", { required: true, maxLength: 20 })}
           />
-          <S.Label>대표 사진</S.Label>
-          <S.HiddenInput
-            type="file"
-            ref={fileInputRef}
-            {...register("client_photo")}
-          />
-          <S.FileButton type="button" onClick={handleFileInputClick}>
-            파일 선택
-          </S.FileButton>
           <S.Label>아이디 &#42;</S.Label>
           <S.CoupleInputContainer>
             <S.Input
