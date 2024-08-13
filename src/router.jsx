@@ -18,7 +18,6 @@ export const router = createBrowserRouter([
       // 로그인 페이지
       {
         index: true,
-        path: "login",
         element: <Login />,
       },
       // 회원가입 페이지
