@@ -205,7 +205,12 @@ export default function Signup() {
       <S.FormContent>
         <S.GotoLogin>이미 계정이 있으신가요?</S.GotoLogin>
         <S.GotoLoginBtn>
-          <Link to={"/login"}>&larr; 로그인 하러가기</Link>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+          >
+            &larr; 로그인 하러가기
+          </button>
         </S.GotoLoginBtn>
         <S.Header>
           <S.Title>회원가입</S.Title>
