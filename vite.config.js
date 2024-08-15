@@ -5,7 +5,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://likelionteam6.mooo.com:9025",
+        target: "http://localhost:81", // Nginx가 제공하는 포트
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,
