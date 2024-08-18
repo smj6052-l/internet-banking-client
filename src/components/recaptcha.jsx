@@ -9,7 +9,7 @@ export default function Recaptcha({ onVerify }) {
   return (
     <div>
       <ReCAPTCHA
-        sitekey="6LfVEwkqAAAAACWX4xdffm2kAxCxfyc5dCGtxUA4"
+        sitekey="6LcdkykqAAAAABfCtrSYRLjmuSZCHSLq7cmfanT6"
         onChange={handleCaptchaChange}
       />
     </div>
