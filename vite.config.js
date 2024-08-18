@@ -5,7 +5,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://likelionteam6.mooo.com:33035", // Nginx가 제공하는 포트
+        target: "https://backend-server:8080", // HTTPS로 설정된 백엔드 서버의 주소
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,
